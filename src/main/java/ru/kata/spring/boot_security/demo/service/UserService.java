@@ -10,21 +10,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
-public class MyUserService implements UserDetailsService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public MyUserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     public List<User> findAllUsers() {
@@ -39,8 +40,7 @@ public class MyUserService implements UserDetailsService {
             throw new UsernameNotFoundException("Пользователь с именем " + username
                     + " не найден");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                mapRolesToAuthorities(user.getRoles()));
+        return user;
     }
 
     public User findByUsername(String username) {
@@ -48,7 +48,7 @@ public class MyUserService implements UserDetailsService {
     }
 
     @Transactional
-    public void deleteUser(int id){
+    public void deleteUser(int id) {
         userRepository.deleteById(id);
     }
 
@@ -71,5 +71,19 @@ public class MyUserService implements UserDetailsService {
     public void updateUser(int id, User updatedUser) {
         updatedUser.setId(id);
         userRepository.save(updatedUser);
+    }
+
+    public List<Role> getRoles() {
+        return roleRepository.findAll();
+    }
+
+    public Set<Role> findRolesByName(String roleName) {
+        Set<Role> roles = new HashSet<>();
+        for (Role role : getRoles()) {
+            if (roleName.contains(role.getName())) {
+                roles.add(role);
+            }
+        }
+        return roles;
     }
 }

@@ -1,60 +1,68 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.MyUserService;
+import ru.kata.spring.boot_security.demo.service.RoleService;
+import ru.kata.spring.boot_security.demo.service.UserService;
+
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping(name = "/admin")
 public class AdminController {
 
-    private final MyUserService userService;
+    private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public AdminController(MyUserService userService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping(value = "/admin")
     public String allUsers(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = (User) userService.loadUserByUsername(email);
+        model.addAttribute("newUser", new User());
+        model.addAttribute("user", user);
         model.addAttribute("usersList", userService.findAllUsers());
-        return "/users";
-    }
-
-    @GetMapping(value = "/admin/edit/{id}")
-    public String editPage(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.findOneUser(id));
-        return "/editPage";
+        model.addAttribute("rolesList", roleService.getAllRoles());
+        return "users";
     }
 
     @PatchMapping(value = "/admin/edit/{id}")
-    public String editUser(@ModelAttribute("user") User user,
-                           @PathVariable("id") int id) {
-        userService.updateUser(id, user);
+    public String editUser(User user,
+                           String role) {
+        user.setRoles(userService.findRolesByName(role));
+        userService.saveUser(user);
         return "redirect:/admin";
-    }
-
-    @GetMapping(value = "/admin/add")
-    public String addNewUser(Model model) {
-        model.addAttribute("user", new User());
-        return "/addUser";
     }
 
     @PostMapping(value = "/admin/add")
     public String addUser(@ModelAttribute("user") User user,
-                          BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
-            return "/add";
+                          @RequestParam(value = "index", required = false) Integer[] id) {
+        if (id != null) {
+            for (Integer roleId : id) {
+                user.addRole(roleService.findRoleById(roleId));
+            }
+        } else {
+            user.addRole(roleService.findRoleById(2));
         }
         userService.saveUser(user);
         return "redirect:/admin";
     }
 
-    @DeleteMapping(value="/admin/delete/{id}")
+    @PostMapping(value = "/admin/delete/{id}")
     public String deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
         return "redirect:/admin";
