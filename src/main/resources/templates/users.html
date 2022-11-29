@@ -79,8 +79,10 @@
                                             <td th:text="${user.age}"></td>
                                             <td th:text="${user.email}"></td>
                                             <td th:text="${user.roles}"></td>
+
                                             <td style="text-align: left;">
 
+                                                <!--Edit modal button-->
                                                 <button class="btn btn-primary" type="button"
                                                         style="background: rgb(62,173,160);border-style: none;"
                                                         th:data-bs-target="'#modal-2'+${user.getId()}"
@@ -93,7 +95,7 @@
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h4 class="modal-title">Edit user</h4>
+                                                                <h4 class="modal-title">Delete user</h4>
                                                                 <button type="button" class="btn-close"
                                                                         data-bs-dismiss="modal"
                                                                         aria-label="Close"></button>
@@ -102,7 +104,7 @@
                                                                 <form style="background: #00000000;display: grid;text-align: center;width: 300px;margin: auto;"
                                                                       th:id="'form_modal-2'+${user.getId()}"
                                                                       th:action="@{/admin/edit/{id}(id=${user.getId()})}"
-                                                                      th:method="patch"
+                                                                      th:method="post"
                                                                       th:object="${user}">
                                                                     <label class="form-label"
                                                                            style="text-align: center;font-weight: bold;margin-top: 20px;">First
@@ -112,17 +114,20 @@
                                                                                    th:name="name"></label><label
                                                                         class="form-label"
                                                                         style="text-align: center;font-weight: bold;">Last
-                                                                    name<input class="form-control" type="text"
+                                                                    name<input class="form-control"
+                                                                               type="text"
                                                                                th:value="${user.getSurname()}"
                                                                                th:name="surname"></label><label
                                                                         class="form-label"
                                                                         style="text-align: center;font-weight: bold;">Age<input
-                                                                        class="form-control" type="text"
+                                                                        class="form-control"
+                                                                        type="text"
                                                                         th:value="${user.getAge()}"
                                                                         th:name="age"></label><label
                                                                         class="form-label"
                                                                         style="text-align: center;font-weight: bold;">Email<input
-                                                                        class="form-control" type="email"
+                                                                        class="form-control"
+                                                                        type="email"
                                                                         th:value="${user.getEmail()}"
                                                                         th:name="email"></label><label
                                                                         class="form-label" style="font-weight: bold;">Password<input
@@ -141,21 +146,23 @@
                                                             <div class="modal-footer">
                                                                 <button class="btn btn-light" type="button"
                                                                         data-bs-dismiss="modal"
-                                                                        style="color: var(--bs-btn-bg);background: rgb(116,117,119);">
+                                                                        style="background: rgb(135,136,139);color: var(--bs-modal-bg);">
                                                                     Close
                                                                 </button>
                                                                 <button class="btn btn-primary" type="submit"
-                                                                        style="background: rgb(51,174,213);"
-                                                                        th:form="'form_model-2'+${user.getId()}">Save
+                                                                        style="background: rgb(71,180,214);"
+                                                                        th:form="'form_modal-2'+${user.getId()}">Edit
                                                                 </button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
+                                            </td>
 
 
                                             <td style="text-align: left;">
+                                                <!--Delete modal button-->
                                                 <button class="btn btn-primary" type="button"
                                                         style="background: rgb(223,78,78);border-style: none;"
                                                         th:data-bs-target="'#modal-1'+${user.getId()}"

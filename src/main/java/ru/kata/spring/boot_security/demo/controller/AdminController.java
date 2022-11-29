@@ -2,18 +2,13 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
-
-import java.util.ArrayList;
 
 @Controller
 @RequestMapping(name = "/admin")
@@ -31,8 +26,8 @@ public class AdminController {
     @GetMapping(value = "/admin")
     public String allUsers(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        User user = (User) userService.loadUserByUsername(email);
+        String name = authentication.getName();
+        User user = (User) userService.loadUserByUsername(name);
         model.addAttribute("newUser", new User());
         model.addAttribute("user", user);
         model.addAttribute("usersList", userService.findAllUsers());
@@ -40,11 +35,19 @@ public class AdminController {
         return "users";
     }
 
-    @PatchMapping(value = "/admin/edit/{id}")
-    public String editUser(User user,
-                           String role) {
-        user.setRoles(userService.findRolesByName(role));
-        userService.saveUser(user);
+    @PostMapping("/admin/edit/{id}")
+    public String editUser(@ModelAttribute("newUser") User user,
+                         @PathVariable("id") int id,
+                         @RequestParam(value = "index", required = false) Integer[] identifiers) {
+
+        if (identifiers != null) {
+            for (Integer roleId : identifiers) {
+                user.addRole(roleService.findRoleById(roleId));
+            }
+        } else {
+            user.addRole(roleService.findRoleById(2));
+        }
+        userService.updateUser(id, user);
         return "redirect:/admin";
     }
 
