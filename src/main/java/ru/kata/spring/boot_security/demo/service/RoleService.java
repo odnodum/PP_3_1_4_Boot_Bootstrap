@@ -5,9 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -28,7 +27,7 @@ public class RoleService {
     }
 
     public Role findRoleById(int id) {
-        return roleRepository.findRoleById(id);
+        return roleRepository.findById(id).orElse(null);
     }
 
 }

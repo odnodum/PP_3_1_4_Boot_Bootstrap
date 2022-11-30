@@ -15,8 +15,12 @@
         <div id="content" style="display: inline;position: relative;">
             <nav class="navbar navbar-light navbar-expand bg-dark shadow mb-4 topbar static-top">
                 <div class="container-fluid">
-                    <div style="width: 700px;"><a class="link-light" href="#" style="text-decoration: navajowhite;">admin@email.com
-                        ROLE_ADMIN</a></div>
+                    <div style="width: 700px;"><a class="link-light" style="text-decoration: navajowhite;">
+                        <span class="font-weight-bold" th:text="${user.email}"/>
+                        with roles:
+                        <span th:each="role : ${user.getRoles()}">
+                        <span th:text="${role.getAuthority()}"/></span>
+                    </a></div>
                     <div><a class="link-light" th:href="@{/logout}"
                             style="text-decoration: navajowhite;margin-top: auto;margin-right: 10px;margin-bottom: auto;margin-left: auto;">Logout</a>
                     </div>
@@ -29,7 +33,7 @@
                         <div class="container d-flex flex-column p-0">
                             <hr class="sidebar-divider my-0">
                             <ul class="navbar-nav text-light" id="accordionSidebar">
-                                <li class="nav-item admin_button"><a class="nav-link" href="#"
+                                <li class="nav-item admin_button"><a class="nav-link"
                                                                      data-bs-target="admin_button"><span>User</span></a>
                                 </li>
                                 <li class="nav-item users_button"></li>
