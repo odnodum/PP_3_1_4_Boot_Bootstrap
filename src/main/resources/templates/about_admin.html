@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>User page</title>
+    <title>Admin page</title>
     <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
 
 </head>
@@ -34,7 +34,14 @@
                             <hr class="sidebar-divider my-0">
                             <ul class="nav nav-pills" id="accordionSidebar">
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-bs-target="admin_button">
+                                    <a class="nav-link" th:href="@{/admin}" data-bs-target="admin_button">
+                                        <span style="color: var(--bs-blue);">
+                                            Admin
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" th:href="@{/about_admin}" data-bs-target="admin_button">
                                         <span>
                                             User
                                         </span>
@@ -47,11 +54,11 @@
                 <div style="margin: auto;position: static;display: block;margin-bottom: auto;width: 900px;max-width: none;height: auto;margin-top: 20px;margin-right: 30px;margin-left: 30px;min-height: 400px;">
                     <div style="height: 302.094px;display: block;position: relative;">
                         <h3 class="text-dark mb-4"
-                            style="display: inline;position: relative;margin-bottom: 0px;width: auto;">User
+                            style="display: inline;position: relative;margin-bottom: 0px;width: auto;">Admin
                             information-page</h3>
                         <p class="text-body m-0 fw-bold"
                            style="background: var(--bs-gray-100);color: rgb(133,135,150);position: relative;display: grid;padding: auto;padding-left: 20px;padding-top: 10px;margin-top: 30px;height: 45px;">
-                            About user</p>
+                            About admin</p>
                         <div class="table-responsive table mt-2" id="dataTable-2" role="grid"
                              aria-describedby="dataTable_info"
                              style="position: static;display: grid;background: var(--bs-white);margin-top: 0px;">
@@ -59,7 +66,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">Id</th>
-                                    <th scope="col">Firsn name</th>
+                                    <th scope="col">First name</th>
                                     <th scope="col">Last name</th>
                                     <th scope="col">Age</th>
                                     <th scope="col">Email</th>

@@ -32,13 +32,21 @@
                          style="background: #ffffff;height: 777.094px;margin-bottom: 20px;display: inline;">
                         <div class="container d-flex flex-column p-0">
                             <hr class="sidebar-divider my-0">
-                            <ul class="navbar-nav text-light" id="accordionSidebar">
-                                <li class="nav-item admin_button"><a class="nav-link active" th:href="@{/admin}"
-                                                                     data-bs-target="admin_button"><span>Admin</span></a>
+                            <ul class="nav nav-pills">
+                                <li class="nav-item">
+                                    <a class="nav-link active" th:href="@{/admin}" data-bs-target="admin_button">
+                                        <span>
+                                            Admin
+                                        </span>
+                                    </a>
                                 </li>
-                                <li class="nav-item users_button"><a class="nav-link link-dark active"
-                                                                     th:href="@{/user}"><span
-                                        class="text-white">User</span></a></li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/about_admin}">
+                                    <span style="color: var(--bs-blue);">
+                                        User
+                                    </span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -112,7 +120,7 @@
                                                                 <form style="background: #00000000;display: grid;text-align: center;width: 300px;margin: auto;"
                                                                       th:id="'form_modal-2'+${user.getId()}"
                                                                       th:action="@{/admin/edit/{id}(id=${user.getId()})}"
-                                                                      th:method="post"
+                                                                      th:method="patch"
                                                                       th:object="${user}">
                                                                     <label class="form-label"
                                                                            style="text-align: center;font-weight: bold;margin-top: 20px;">First
@@ -144,7 +152,7 @@
                                                                         th:value="${user.getPassword()}"
                                                                         th:name="password"></label><label
                                                                         class="form-label" style="font-weight: bold;">Role<select
-                                                                        class="form-select" name="index">
+                                                                        class="form-select" name="index" size="2" multiple="multiple">
                                                                             <div th:each="role : ${rolesList}">
                                                                                 <option th:text="${role.name}"
                                                                                         th:value="${role.id}"
@@ -193,7 +201,7 @@
                                                                 <form style="background: #00000000;display: grid;text-align: center;width: 300px;margin: auto;"
                                                                       th:id="'form_modal-1'+${user.getId()}"
                                                                       th:action="@{/admin/delete/{id}(id=${user.getId()})}"
-                                                                      th:method="post">
+                                                                      th:method="delete">
                                                                     <label class="form-label"
                                                                            style="text-align: center;font-weight: bold;margin-top: 20px;">First
                                                                         name<input class="form-control"
@@ -224,7 +232,7 @@
                                                                         th:value="${user.getPassword()}"
                                                                         th:name="password"></label><label
                                                                         class="form-label" style="font-weight: bold;">Role<select
-                                                                        class="form-select" name="index">
+                                                                        class="form-select" name="index" size="2">
                                                                     <div th:each="role : ${rolesList}">
                                                                         <option th:text="${role.name}"
                                                                                 th:value="${role.id}"/>
@@ -288,8 +296,8 @@
                                                 th:field="*{password}" th:name="password"></label><label
                                                 class="form-label"
                                                 style="font-weight: bold;">Role
-                                            <select class="form-select" name="index">
-                                            <optgroup label="This is a group">
+                                            <select class="form-select" name="index" size="2" multiple="multiple">
+                                            <optgroup>
                                                 <div th:each="role : ${rolesList}">
                                                     <option th:text="${role.name}"
                                                             th:value="${role.id}"
